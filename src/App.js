@@ -1,26 +1,15 @@
-
-// import fs from 'fs';
-// import DataTable from 'react-data-table-component';
+import React from 'react';
 import './App.css';
 
-// const path = 'C:/Users/A0806223/CWV.txt';
-
-// const read = async () => fs.readFile(path, (err, data) => {
-//   if (err) {
-//     console.error(err);
-//     throw err;
-//   } else {
-//     try {
-//       return JSON.parse(data);
-//     } catch (error) {
-//       console.error(error);
-//       throw error;
-//     }
-//   }
-// });
-
 function App() {
-  // const data = read();
+  const [data, setData] =  React.useState({});
+
+  React.useEffect(() => {
+    fetch('http://localhost:3000').then(response => response.json().then(data => setData(data)));
+  }, []);
+
+  console.log(data);
+
   return (
     <div className="App">
      
