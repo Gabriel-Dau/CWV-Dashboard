@@ -2,7 +2,21 @@ import DataTable from 'react-data-table-component';
 import React from 'react';
 import './App.css';
 
-
+const ExpandedContent = ({ data }) => {
+  const items = ['value', 'rating', 'url', 'date', 'delta', 'navigationType', 'id']
+  return (
+    <table className='expandedContent'>
+      {items.map(item => 
+        <tr>
+          <td>{item}: </td>
+          <td className='expandedContentKey'>{data[item]}</td>
+        </tr>
+      )}
+    
+  </table>
+  )
+}
+  
 
 function App() {
   const [data, setData] =  React.useState([]);
@@ -25,14 +39,8 @@ function App() {
       sortable: true,
     },
     {
-      name: 'Delta',
-      selector: row => row.delta,
-      sortable: true,
-    },
-    {
       name: 'URL',
       selector: row => row.url,
-      sortable: true,
     },
     {
       name: 'Date',
@@ -40,20 +48,53 @@ function App() {
       sortable: true,
     }
   ];
+    
+  const conditionalRowStyles = [
+    {
+      when: row => row.value <= 200,
+      style: {
+        backgroundColor : 'green',
+        color: 'white'
+      },
+      
+    },
+    {
+      when: row => row.value >= 201 && row.value <= 500,
+      style: {
+        backgroundColor : 'yellow',
+        color: 'black'
+      },
+    },
+    {
+      when: row => row.value > 500,
+      style: {
+        backgroundColor : 'red',
+        color: 'white'
+      },
+    }
+  ]
   
   // const Basic = () => <DataTable title="Interaction to Next Paint" columns={columns} data={data} pagination />;
   
   return (
     <div className="App">
-      <h2>Interaction to Next Paint</h2>
-      <DataTable
+      <div className="title">
+        <h1>Interaction to Next Paint</h1>
+      </div>
+      <div className='dataTable'>
+        <DataTable
         columns={columns}
         data={data}
+        theme="dark"
         pagination
-     />
+        persistTableHead={true}
+        conditionalRowStyles={conditionalRowStyles}
+        expandableRows
+        expandableRowsComponent={ExpandedContent}
+        />
+     </div>
     </div>
   );
 }
 
 export default App;
-// save
