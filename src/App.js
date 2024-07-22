@@ -1,9 +1,9 @@
-import DataTable from 'react-data-table-component';
+import  from 'react-data-table-component';
 import React from 'react';
 import './App.css';
 
 const ExpandedContent = ({ data }) => {
-  const items = ['value', 'rating', 'url', 'date', 'delta', 'navigationType', 'id']
+  const items = ['value', 'rating', 'url', 'date', 'delta', 'navigationType', 'id', 'DOMpath', 'userAgent']
   return (
     <table className='expandedContent'>
       {items.map(item => 
@@ -39,10 +39,6 @@ function App() {
       sortable: true,
     },
     {
-      name: 'URL',
-      selector: row => row.url,
-    },
-    {
       name: 'Date',
       selector: row => row.date,
       sortable: true,
@@ -53,7 +49,7 @@ function App() {
     {
       when: row => row.value <= 200,
       style: {
-        backgroundColor : 'green',
+        backgroundColor : 'rgba(63, 195, 128, 0.9)',
         color: 'white'
       },
       
@@ -61,21 +57,19 @@ function App() {
     {
       when: row => row.value >= 201 && row.value <= 500,
       style: {
-        backgroundColor : 'yellow',
-        color: 'black'
+        backgroundColor : 'rgba(248, 148, 6, 0.9)',
+        color: 'white'
       },
     },
     {
       when: row => row.value > 500,
       style: {
-        backgroundColor : 'red',
+        backgroundColor : 'rgba(242, 38, 19, 0.9)',
         color: 'white'
       },
     }
   ]
-  
-  // const Basic = () => <DataTable title="Interaction to Next Paint" columns={columns} data={data} pagination />;
-  
+    
   return (
     <div className="App">
       <div className="title">
