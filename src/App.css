@@ -25,6 +25,17 @@
   padding-left: 1rem;
 } 
 
+.filters {
+  display: flex;
+  justify-content: end;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.filter {
+  display: flex;
+}
+
 .filterInput{
   height: 32px;
 	width: 200px;

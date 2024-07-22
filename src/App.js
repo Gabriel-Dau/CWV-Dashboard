@@ -35,12 +35,12 @@ const ClearButton = styled('button')`
   color: white;
 `;
 
-const FilterComponent = ({ filterText, onFilter, onClear }) => (
+const FilterComponent = ({ filterText, onFilter, onClear, placeholder }) => (
   <>
     <TextField
       id="search"
       type="text"
-      placeholder="Filter By URL"
+      placeholder={placeholder}
       aria-label="Search Input"
       value={filterText}
       onChange={onFilter}
@@ -52,7 +52,7 @@ const FilterComponent = ({ filterText, onFilter, onClear }) => (
 );
 
 const ExpandedContent = ({ data }) => {
-  const items = ['value', 'rating', 'url', 'date', 'delta', 'navigationType', 'id', 'DOMpath', 'userAgent']
+  const items = ['value', 'rating', 'url', 'date', 'DOMNode', 'DOMpath', 'userAgent'];
   return (
     <table className='expandedContent'>
       {items.map(item => 
@@ -117,19 +117,47 @@ function App() {
     }
   ];
   
-  const [filterText, setFilterText] = React.useState('');
+  const [urlFilterText, setUrlFilterText] = React.useState('');
+  const [generalFilterText, setGeneralFilterText] = React.useState('');
   const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
-  const filteredItems = data.filter(item => item.url && item.url.toLowerCase().includes(filterText.toLowerCase()));
+
+  const filteredItems = data.filter(item => {
+    const criteria = item.date?.toLowerCase() + ' ' + item.url?.toLowerCase() + ' ' + item.userAgent?.toLowerCase() + ' ' + item.rating?.toLowerCase();
+    return criteria.includes(urlFilterText.toLowerCase()) && criteria.includes(generalFilterText.toLowerCase());
+  });
   
   const subHeaderComponentMemo = React.useMemo(() => {
-    const handleClear = () => {
-      if (filterText) {
+    const handleClear = filterToClear => {
+      if (urlFilterText === filterToClear) {
         setResetPaginationToggle(!resetPaginationToggle);
-        setFilterText('');
+        setUrlFilterText('');
+      }
+      if (generalFilterText === filterToClear) {
+        setResetPaginationToggle(!resetPaginationToggle);
+        setGeneralFilterText('');
       }
     };
-    return <FilterComponent onFilter={e => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />;
-  }, [filterText, resetPaginationToggle]);
+    return (
+      <div className="filters">
+        <div className="filter">
+          <FilterComponent 
+            placeholder="Filter by URL" 
+            onFilter={e => setUrlFilterText(e.target.value)} 
+            onClear={() => handleClear(urlFilterText)} 
+            filterText={urlFilterText} 
+          />
+        </div>
+        <div className="filter">
+          <FilterComponent 
+            placeholder="Filter by date, user agent, rating" 
+            onFilter={e => setGeneralFilterText(e.target.value)} 
+            onClear={() => handleClear(generalFilterText)} 
+            filterText={generalFilterText} 
+          />
+        </div>
+      </div>
+    );
+  }, [urlFilterText, generalFilterText, resetPaginationToggle]);
 
   return (
     <div className="App">
