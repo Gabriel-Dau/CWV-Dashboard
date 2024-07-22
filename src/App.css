@@ -1,6 +1,6 @@
 .App {
-  padding: 0 1.5rem;
-  background-color: #282c34;
+  padding: 1.5rem;
+  background-color: #5C5C5C;
   min-height: 100vh;
   display: flex;
   gap: 1.5rem;
@@ -8,12 +8,6 @@
   align-items: center;
   font-size: calc(10px + 2vmin);
   color: white;
-}
-
-.title {
-  width: 100%;
-  display: flex;
-  justify-content: left;
 }
 
 .dataTable {
