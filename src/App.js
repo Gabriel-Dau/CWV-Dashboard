@@ -76,7 +76,7 @@ function App() {
         const urlParams = new URLSearchParams(window.location.search);
         const url = urlParams.get('url');
         const dataAsArray = Object.keys(data).map(key => data[key]);
-        const filteredData = url ? dataAsArray.filter(data => data.url?.toLowerCase().includes(url)) : dataAsArray;
+        const filteredData = url ? dataAsArray.filter(data => data.url?.toLowerCase().includes(decodeURIComponent(url))) : dataAsArray;
         setData(filteredData);
       })
     );
