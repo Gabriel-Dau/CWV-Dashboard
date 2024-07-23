@@ -1,5 +1,4 @@
 .App {
-  padding: 1.5rem;
   background-color: #5c5c5c;
   min-height: 100vh;
   display: flex;
@@ -8,6 +7,22 @@
   align-items: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+h1 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.subHeader {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
 .dataTable {
@@ -19,9 +34,19 @@
 
 .expandedContent {
   font-size: 13px;
+  padding: 1rem 2rem;
 }
 
-.expandedContentKey{
+.expandedContentRow {
+  display: flex;
+  margin: 0.25rem;
+}
+
+.expandedContentKey {
+  min-width: 80px;
+} 
+
+.expandedContentValue {
   padding-left: 1rem;
 } 
 

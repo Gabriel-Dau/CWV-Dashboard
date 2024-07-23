@@ -65,9 +65,9 @@ const ExpandedContent = ({ data }) => {
     <table className='expandedContent'>
       <tbody>
         {Object.keys(map).map(key =>
-          <tr key={key}>
-            <td>{map[key]}: </td>
-            <td className='expandedContentKey'>{data[key]}</td>
+          <tr key={key} className="expandedContentRow">
+            <td className='expandedContentKey'>{map[key]}: </td>
+            <td className='expandedContentValue'>{data[key]}</td>
           </tr>
         )}
       </tbody>
@@ -120,6 +120,7 @@ function App() {
       when: row => row.value >= 201 && row.value <= 500,
       style: {
         backgroundColor : 'rgba(248, 148, 6, 0.9)',
+        padding: '0px 24px',
         color: 'white'
       },
     },
@@ -147,22 +148,24 @@ function App() {
       }
     };
     return (
-      <div className="filter">
-        <FilterComponent 
-          placeholder="Search"
-          onFilter={e => setfilterText(e.target.value)} 
-          onClear={handleClear} 
-          filterText={filterText} 
-        />
+      <div className="subHeader">
+        <h1>Interaction to Next Paint</h1>
+        <div className="filter">
+          <FilterComponent 
+            placeholder="Search"
+            onFilter={e => setfilterText(e.target.value)} 
+            onClear={handleClear} 
+            filterText={filterText} 
+          />
+        </div>
       </div>
     );
   }, [filterText, resetPaginationToggle]);
 
   return (
     <div className="App">
-      <div className='dataTable'>
+      <div className="dataTable">
         <DataTable
-          title="Interaction to Next Paint"
           columns={columns}
           data={filteredItems}
           theme="dark"
