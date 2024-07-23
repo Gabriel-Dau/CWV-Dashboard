@@ -55,13 +55,14 @@ const ExpandedContent = ({ data }) => {
   const items = ['value', 'rating', 'url', 'date', 'DOMNode', 'DOMpath', 'userAgent'];
   return (
     <table className='expandedContent'>
-      {items.map(item => 
-        <tr>
-          <td>{item}: </td>
-          <td className='expandedContentKey'>{data[item]}</td>
-        </tr>
-      )}
-    
+      <tbody>
+        {items.map(item => 
+          <tr key={item}>
+            <td>{item}: </td>
+            <td className='expandedContentKey'>{data[item]}</td>
+          </tr>
+        )}
+      </tbody>
   </table>
   )
 };
@@ -70,9 +71,15 @@ function App() {
   const [data, setData] =  React.useState([]);
 
   React.useEffect(() => {
-    fetch('http://localhost:3000').then(response => response.json().then(data => {
-      setData(Object.keys(data).map(key => data[key]));
-    }));
+    fetch('http://localhost:3000').then(response =>
+      response.json().then(data => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const url = urlParams.get('url');
+        const dataAsArray = Object.keys(data).map(key => data[key]);
+        const filteredData = url ? dataAsArray.filter(data => data.url?.toLowerCase().includes(url)) : dataAsArray;
+        setData(filteredData);
+      })
+    );
   }, []);
 
   const columns = [
@@ -117,47 +124,31 @@ function App() {
     }
   ];
   
-  const [urlFilterText, setUrlFilterText] = React.useState('');
-  const [generalFilterText, setGeneralFilterText] = React.useState('');
+  const [filterText, setfilterText] = React.useState('');
   const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
 
-  const filteredItems = data.filter(item => {
-    const criteria = item.date?.toLowerCase() + ' ' + item.url?.toLowerCase() + ' ' + item.userAgent?.toLowerCase() + ' ' + item.rating?.toLowerCase();
-    return criteria.includes(urlFilterText.toLowerCase()) && criteria.includes(generalFilterText.toLowerCase());
-  });
+  const filteredItems = data.filter(item =>
+    `${item.date?.toLowerCase()} ${item.userAgent?.toLowerCase()} ${item.rating?.toLowerCase()}`.includes(filterText.toLowerCase())
+  );
   
   const subHeaderComponentMemo = React.useMemo(() => {
-    const handleClear = filterToClear => {
-      if (urlFilterText === filterToClear) {
+    const handleClear = () => {
+      if (filterText) {
         setResetPaginationToggle(!resetPaginationToggle);
-        setUrlFilterText('');
-      }
-      if (generalFilterText === filterToClear) {
-        setResetPaginationToggle(!resetPaginationToggle);
-        setGeneralFilterText('');
+        setfilterText('');
       }
     };
     return (
-      <div className="filters">
-        <div className="filter">
-          <FilterComponent 
-            placeholder="Filter by URL" 
-            onFilter={e => setUrlFilterText(e.target.value)} 
-            onClear={() => handleClear(urlFilterText)} 
-            filterText={urlFilterText} 
-          />
-        </div>
-        <div className="filter">
-          <FilterComponent 
-            placeholder="Filter by date, user agent, rating" 
-            onFilter={e => setGeneralFilterText(e.target.value)} 
-            onClear={() => handleClear(generalFilterText)} 
-            filterText={generalFilterText} 
-          />
-        </div>
+      <div className="filter">
+        <FilterComponent 
+          placeholder="Search"
+          onFilter={e => setfilterText(e.target.value)} 
+          onClear={handleClear} 
+          filterText={filterText} 
+        />
       </div>
     );
-  }, [urlFilterText, generalFilterText, resetPaginationToggle]);
+  }, [filterText, resetPaginationToggle]);
 
   return (
     <div className="App">
