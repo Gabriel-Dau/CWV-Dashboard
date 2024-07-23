@@ -159,6 +159,8 @@ function App() {
           data={filteredItems}
           theme="dark"
           pagination
+          paginationPerPage={25}
+          paginationRowsPerPageOptions={[25, 50, 75, 100]}
           paginationResetDefaultPage={resetPaginationToggle}
           subHeader
           subHeaderComponent={subHeaderComponentMemo}
