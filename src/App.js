@@ -52,14 +52,22 @@ const FilterComponent = ({ filterText, onFilter, onClear, placeholder }) => (
 );
 
 const ExpandedContent = ({ data }) => {
-  const items = ['value', 'rating', 'url', 'date', 'DOMNode', 'DOMpath', 'userAgent'];
+  const map = {
+    'value': 'Value', 
+    'rating': 'Rating', 
+    'url': 'URL', 
+    'date': 'Date', 
+    'domNode': 'DOM Node', 
+    'domPath': 'DOM Path', 
+    'userAgent': 'User Agent',
+  };
   return (
     <table className='expandedContent'>
       <tbody>
-        {items.map(item => 
-          <tr key={item}>
-            <td>{item}: </td>
-            <td className='expandedContentKey'>{data[item]}</td>
+        {Object.keys(map).map(key =>
+          <tr key={key}>
+            <td>{map[key]}: </td>
+            <td className='expandedContentKey'>{data[key]}</td>
           </tr>
         )}
       </tbody>
