@@ -112,6 +112,7 @@ function App() {
       when: row => row.value <= 200,
       style: {
         backgroundColor : 'rgba(63, 195, 128, 0.9)',
+        padding: '0px 24px',
         color: 'white'
       },
       
@@ -128,6 +129,7 @@ function App() {
       when: row => row.value > 500,
       style: {
         backgroundColor : 'rgba(242, 38, 19, 0.9)',
+        padding: '0px 24px',
         color: 'white'
       },
     }
