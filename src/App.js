@@ -154,7 +154,7 @@ function App() {
         <h1>Interaction to Next Paint</h1>
         <div className="filter">
           <FilterComponent 
-            placeholder="Search"
+            placeholder="Search by date, user agent, rating..."
             onFilter={e => setfilterText(e.target.value)} 
             onClear={handleClear} 
             filterText={filterText} 
