@@ -1,7 +1,7 @@
-import DataTable from 'react-data-table-component';
 import React from 'react';
-import './App.css';
+import ReactDataTable from 'react-data-table-component';
 import styled from 'styled-components';
+import './index.css';
 
 const TextField = styled.input`
   height: 32px;
@@ -74,23 +74,16 @@ const ExpandedContent = ({ data }) => {
   </table>
   )
 };
-  
-function App() {
-  const [data, setData] =  React.useState([]);
-  const [url, setUrl] = React.useState('');
 
-  React.useEffect(() => {
-    fetch('http://localhost:3000').then(response =>
-      response.json().then(data => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const url = urlParams.get('url');
-        const dataAsArray = Object.keys(data).map(key => data[key]);
-        const filteredData = url ? dataAsArray.filter(data => data.url?.toLowerCase().includes(decodeURIComponent(url))) : dataAsArray;
-        setUrl(url);
-        setData(filteredData);
-      })
-    );
-  }, []);
+export const DataTable = props => {
+  const { title, data } = props;
+
+  const [filterText, setfilterText] = React.useState('');
+  const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
+
+  const filteredItems = data.filter(item =>
+    `${item.date?.toLowerCase()} ${item.userAgent?.toLowerCase()} ${item.rating?.toLowerCase()}`.includes(filterText.toLowerCase())
+  );
 
   const columns = [
     {
@@ -136,14 +129,7 @@ function App() {
       },
     }
   ];
-  
-  const [filterText, setfilterText] = React.useState('');
-  const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
 
-  const filteredItems = data.filter(item =>
-    `${item.date?.toLowerCase()} ${item.userAgent?.toLowerCase()} ${item.rating?.toLowerCase()}`.includes(filterText.toLowerCase())
-  );
-  
   const subHeaderComponentMemo = React.useMemo(() => {
     const handleClear = () => {
       if (filterText) {
@@ -153,7 +139,7 @@ function App() {
     };
     return (
       <div className="subHeader">
-        <h1>{`Interaction to Next Paint${url ? ` - ${url}` : ''}`}</h1>
+        <h1>{title}</h1>
         <div className="filter">
           <FilterComponent 
             placeholder="Search by date, user agent, rating..."
@@ -164,29 +150,25 @@ function App() {
         </div>
       </div>
     );
-  }, [filterText, resetPaginationToggle, url]);
+  }, [filterText, resetPaginationToggle, title]);
 
   return (
-    <div className="App">
-      <div className="dataTable">
-        <DataTable
-          columns={columns}
-          data={filteredItems}
-          theme="dark"
-          pagination
-          paginationPerPage={25}
-          paginationRowsPerPageOptions={[25, 50, 75, 100]}
-          paginationResetDefaultPage={resetPaginationToggle}
-          subHeader
-          subHeaderComponent={subHeaderComponentMemo}
-          persistTableHead={true}
-          conditionalRowStyles={conditionalRowStyles}
-          expandableRows
-          expandableRowsComponent={ExpandedContent}
-        />
+    <div className="dataTable">
+      <ReactDataTable
+        columns={columns}
+        data={filteredItems}
+        theme="dark"
+        pagination
+        paginationPerPage={25}
+        paginationRowsPerPageOptions={[25, 50, 75, 100]}
+        paginationResetDefaultPage={resetPaginationToggle}
+        subHeader
+        subHeaderComponent={subHeaderComponentMemo}
+        persistTableHead={true}
+        conditionalRowStyles={conditionalRowStyles}
+        expandableRows
+        expandableRowsComponent={ExpandedContent}
+      />
      </div>
-    </div>
-  );
-}
-
-export default App;
+  )
+};
