@@ -77,6 +77,7 @@ const ExpandedContent = ({ data }) => {
   
 function App() {
   const [data, setData] =  React.useState([]);
+  const [url, setUrl] = React.useState('');
 
   React.useEffect(() => {
     fetch('http://localhost:3000').then(response =>
@@ -85,6 +86,7 @@ function App() {
         const url = urlParams.get('url');
         const dataAsArray = Object.keys(data).map(key => data[key]);
         const filteredData = url ? dataAsArray.filter(data => data.url?.toLowerCase().includes(decodeURIComponent(url))) : dataAsArray;
+        setUrl(url);
         setData(filteredData);
       })
     );
@@ -151,7 +153,7 @@ function App() {
     };
     return (
       <div className="subHeader">
-        <h1>Interaction to Next Paint</h1>
+        <h1>{`Interaction to Next Paint${url ? ` - ${url}` : ''}`}</h1>
         <div className="filter">
           <FilterComponent 
             placeholder="Search by date, user agent, rating..."
@@ -162,7 +164,7 @@ function App() {
         </div>
       </div>
     );
-  }, [filterText, resetPaginationToggle]);
+  }, [filterText, resetPaginationToggle, url]);
 
   return (
     <div className="App">
